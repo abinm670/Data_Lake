@@ -1,0 +1,8 @@
+# project files
+test.ipynb
+data/
+env/
+test.ipynb
+
+# macOS Files
+.DS_Store
