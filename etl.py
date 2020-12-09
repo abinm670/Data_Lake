@@ -10,11 +10,11 @@ from pyspark.sql.window import Window
 
 import pyspark.sql.functions as F
 
-# config = configparser.ConfigParser()
-# config.read('dl.cfg')
+config = configparser.ConfigParser()
+config.read('dl.cfg')
 
-# os.environ['AWS_ACCESS_KEY_ID']=config['AWS_ACCESS_KEY_ID']
-# os.environ['AWS_SECRET_ACCESS_KEY']=config['AWS_SECRET_ACCESS_KEY']
+os.environ['AWS_ACCESS_KEY_ID'] = config['AWS_ACCESS_KEY_ID']
+os.environ['AWS_SECRET_ACCESS_KEY'] = config['AWS_SECRET_ACCESS_KEY']
 
 
 def create_spark_session():
@@ -24,10 +24,12 @@ def create_spark_session():
         .getOrCreate()
     return spark
 
+# Extarct data from s3 file from s3 bucket prkify/data/song_data
+# laod it in to Song, Artist Tables EL
 
 def process_song_data(spark, input_data, output_data):
     # get filepath to song data file
-    song_data = input_data + '/song_data/*/*/*/*.json'
+    song_data = input_data + 'song_data/*/*/*/*.json'
 
     # read song data file
     df = spark.read.json(song_data)
@@ -54,6 +56,9 @@ def process_song_data(spark, input_data, output_data):
     artists_table.write.mode('overwrite') \
         .parquet(os.path.join(output_data + 'artists/'))
 
+
+# Extarct the log file from s3 bucket prkify/data/log-data
+#load the data into table and transform the data --- ELT
 
 def process_log_data(spark, input_data, output_data):
     # get filepath to log data file
@@ -107,7 +112,7 @@ def process_log_data(spark, input_data, output_data):
     
 
     # read in song data to use for songplays table
-    song_df = spark.read.json(input_data + '/song_data/*/*/*/*.json')
+    song_df = spark.read.json(input_data + 'song_data/*/*/*/*.json')
 
     #extract columns from joined song and log datasets to create songplays table
     songplays_table = df.join(song_df, song_df.artist_name == df.artist , how='left') \
@@ -128,9 +133,8 @@ def process_log_data(spark, input_data, output_data):
 
 def main():
     spark = create_spark_session()
-    input_data = 'data/'
-    # "s3a://udacity-dend/"
-    output_data = "data/extract_data/"
+    input_data = "s3://sprkify/data/"
+    output_data = "s3://sprkify/output/"
 
     process_song_data(spark, input_data, output_data)
     process_log_data(spark, input_data, output_data)
