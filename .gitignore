@@ -3,6 +3,8 @@ test.ipynb
 data/
 env/
 test.ipynb
+mykeypair.pem
+
 
 # macOS Files
 .DS_Store
