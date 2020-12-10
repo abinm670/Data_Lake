@@ -126,8 +126,8 @@ def process_log_data(spark, input_data, output_data):
 
 def main():
     spark = create_spark_session()
-    input_data = "s3://sprkify/data/"
-    output_data = "s3://sprkify/output/"
+    input_data = "s3a://sprkify/data/"
+    output_data = "s3a://sprkify/output/"
 
     process_song_data(spark, input_data, output_data)
     process_log_data(spark, input_data, output_data)
