@@ -26,4 +26,5 @@
 ### project files:
 - etl.py ETL script
 - local_etl.py test the ETL localy
+- Sparkify.ipynb notebook inside the EMR - elastic MapReduce cluster
   
